@@ -1,4 +1,5 @@
 import defaultRequest = require('request');
+
 // import request from 'request';
 
 export default class CognitiveService {
@@ -19,4 +20,3 @@ export default class CognitiveService {
   }
 
 }
-
