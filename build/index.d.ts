@@ -1,16 +1,25 @@
-import CognitiveService from "./classes/cognitive-service";
-export interface IDetectFace {
-    returnFaceID: boolean;
-    returnFaceLandmarks: boolean;
-    returnFaceAttributes: string;
+import CognitiveService from './classes/cognitive-service';
+export interface DetectFaceFromImageUrl {
+    returnFaceId?: boolean;
+    returnFaceLandmarks?: boolean;
+    returnFaceAttributes?: string[];
+    image: any;
 }
-export interface IDetectFaceFromURLOptions extends IDetectFace {
-    image: URL;
+export interface DetectFaceFromBinaryImage {
+    returnFaceId?: boolean;
+    returnFaceLandmarks?: boolean;
+    returnFaceAttributes?: string[];
+    binaryImage: any;
 }
-export interface IDetectFaceFromBinaryImage extends IDetectFace {
-    binaryImage: Blob;
+export interface DetectFaceOptions {
+    returnFaceId?: boolean;
+    returnFaceLandmarks?: boolean;
+    returnFaceAttributes?: string[];
+    binaryImage?: any;
+    image?: any;
 }
 export declare class FaceAPI extends CognitiveService {
     constructor(apiKey: string);
-    detectFaceFromImageURL(detectFaceOptions: IDetectFaceFromURLOptions): void;
+    detectFaceFromtBinaryImage(detectFaceOptions: DetectFaceFromBinaryImage): void;
+    detectFaceFromImageUrl(detectFaceOptions: DetectFaceFromImageUrl): void;
 }

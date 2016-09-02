@@ -1,27 +1,28 @@
 "use strict";
-const cognitive_service_1 = require("./classes/cognitive-service");
-const URL_ts_1 = require("./constants/URL.ts");
-function isBinaryImage(detectFaceOptions) {
-    return detectFaceOptions.binaryImage !== undefined;
-}
-function isImageURL(detectFaceOptions) {
-    return detectFaceOptions.image !== undefined;
-}
+const cognitive_service_1 = require('./classes/cognitive-service');
+const URL_1 = require('./constants/URL');
 function buildDetectFaceURL(detectFaceOptions, url) {
-    if (isImageURL(detectFaceOptions)) {
-        return `${url}?sdf=sdfghhfhgfhgfh`;
-    }
-    if (isBinaryImage) { }
+    const optionsUrlString = Object.keys(detectFaceOptions)
+        .filter((key) => (key !== 'image' && key !== 'binaryImage'))
+        .map((validKeyName) => (`?${validKeyName}=${detectFaceOptions[validKeyName]}`))
+        .join('');
+    return `${url}${optionsUrlString}`;
 }
 class FaceAPI extends cognitive_service_1.default {
     constructor(apiKey) {
         super(apiKey);
     }
-    detectFaceFromImageURL(detectFaceOptions) {
-        if (detectFaceOptions.image)
-            ;
-        this.makeRequest(URL_ts_1.default);
+    detectFaceFromtBinaryImage(detectFaceOptions) {
+        const requestUrl = buildDetectFaceURL(detectFaceOptions, URL_1.default.face.detect);
+        console.log(requestUrl);
+    }
+    detectFaceFromImageUrl(detectFaceOptions) {
     }
 }
 exports.FaceAPI = FaceAPI;
+const face = new FaceAPI('2f79c9a6299f4a5c88df99ada04ca8a8');
+face.detectFaceFromImageUrl({ returnFaceId: true,
+    returnFaceLandmarks: false,
+    returnFaceAttributes: ['age', 'gender'],
+    image: 'http://i.stack.imgur.com/GsDIl.jpg' });
 //# sourceMappingURL=index.js.map

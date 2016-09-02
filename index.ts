@@ -1,33 +1,34 @@
-import CognitiveService from "./classes/cognitive-service";
-import urlConstants from "./constants/URL.ts";
+import CognitiveService from './classes/cognitive-service';
+import urlConstants from './constants/URL';
 
-export interface IDetectFace {
-    returnFaceID: boolean;
-    returnFaceLandmarks: boolean;
-    returnFaceAttributes: string;
+export interface DetectFaceFromImageUrl  {
+    returnFaceId?: boolean;
+    returnFaceLandmarks?: boolean;
+    returnFaceAttributes?: string[];
+    image: any;
 }
 
-export interface IDetectFaceFromURLOptions extends IDetectFace {
-    image: URL;
+export interface DetectFaceFromBinaryImage   {
+    returnFaceId?: boolean;
+    returnFaceLandmarks?: boolean;
+    returnFaceAttributes?: string[];
+    binaryImage: any;
 }
 
-export interface IDetectFaceFromBinaryImage extends IDetectFace {
-    binaryImage: Blob;
+export interface DetectFaceOptions {
+  returnFaceId?: boolean;
+  returnFaceLandmarks?: boolean;
+  returnFaceAttributes?: string[];
+  binaryImage?: any;
+  image?: any;
 }
 
-function isBinaryImage(detectFaceOptions: IDetectFaceFromBinaryImage | IDetectFaceFromURLOptions): detectFaceOptions is IDetectFaceFromBinaryImage {
-    return (<IDetectFaceFromBinaryImage>detectFaceOptions).binaryImage !== undefined;
-}
-
-function isImageURL(detectFaceOptions: IDetectFaceFromBinaryImage | IDetectFaceFromURLOptions): detectFaceOptions is IDetectFaceFromURLOptions {
-    return (<IDetectFaceFromURLOptions>detectFaceOptions).image !== undefined;
-}
-
-function buildDetectFaceURL(detectFaceOptions: IDetectFaceFromURLOptions | IDetectFaceFromBinaryImage, url: string) {
-  if (isImageURL(detectFaceOptions)) {
-    return `${url}?sdf=sdfghhfhgfhgfh`;
-  }
-  if (isBinaryImage) {}
+function buildDetectFaceURL(detectFaceOptions: DetectFaceOptions, url: string) {
+   const optionsUrlString = Object.keys(detectFaceOptions)
+      .filter((key) => (key !== 'image' && key !== 'binaryImage'))
+      .map((validKeyName) => (`?${validKeyName}=${detectFaceOptions[validKeyName]}`))
+      .join('');
+  return `${url}${optionsUrlString}`;
 }
 
 export class FaceAPI extends CognitiveService {
@@ -36,8 +37,20 @@ export class FaceAPI extends CognitiveService {
     super(apiKey);
   }
 
-  detectFaceFromImageURL(detectFaceOptions: IDetectFaceFromURLOptions) {
-    if (detectFaceOptions.image);
-    this.makeRequest(urlConstants);
+  public detectFaceFromtBinaryImage(detectFaceOptions: DetectFaceFromBinaryImage ) {
+    const requestUrl = buildDetectFaceURL(detectFaceOptions, urlConstants.face.detect);
+    // this.makeRequest(urlConstants);
+    console.log(requestUrl);
+  }
+
+  public detectFaceFromImageUrl(detectFaceOptions: DetectFaceFromImageUrl) {
+
   }
 }
+
+
+const face = new FaceAPI('2f79c9a6299f4a5c88df99ada04ca8a8');
+face.detectFaceFromImageUrl({returnFaceId: true,
+    returnFaceLandmarks: false,
+    returnFaceAttributes: ['age', 'gender'],
+    image: 'http://i.stack.imgur.com/GsDIl.jpg'});
