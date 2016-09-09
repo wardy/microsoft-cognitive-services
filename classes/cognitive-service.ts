@@ -2,6 +2,12 @@ import defaultRequest = require('request');
 
 // import request from 'request';
 
+export interface CB {
+  error: void;
+  response: Object;
+  body: Object;
+}
+
 export default class CognitiveService {
   private request;
   private apiKey: string;
@@ -11,8 +17,12 @@ export default class CognitiveService {
     this.apiKey = apiKey;
   }
 
-  public makeRequest (url:string, cb) {
-    return this.request('http://localhost:8000/face-checker', cb);
+  public makeRequest (options, cb) {
+    return this.request.post(options, cb);
+  }
+
+  public buildHeaders (headers) {
+    return Object.assign({}, {'Ocp-Apim-Subscription-Key': this.apiKey }, headers);
   }
 
   public sayHi () {

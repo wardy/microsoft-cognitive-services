@@ -5,8 +5,11 @@ class CognitiveService {
         this.request = requestLibrary;
         this.apiKey = apiKey;
     }
-    makeRequest(url, cb) {
-        return this.request('http://localhost:8000/face-checker', cb);
+    makeRequest(options, cb) {
+        return this.request.post(options, cb);
+    }
+    buildHeaders(headers) {
+        return Object.assign({}, { 'Ocp-Apim-Subscription-Key': this.apiKey }, headers);
     }
     sayHi() {
         console.log('sdfdsfhdsfkdhsfkdsfldshfsjkhfs');
